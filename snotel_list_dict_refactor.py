@@ -11,10 +11,11 @@ response = requests.get(url)
 # read raw Request to clean CSV - eliminate comment rows with "#"
 clean_file = 'clean.csv'
 with open(clean_file, 'w') as fo:
-	r = response.text
-	for line in r.iter_lines():
-		if "#" not in line:
-			fo.write(line)
+	# r = response.text
+	for line in response.iter_lines():
+		t = str(line)
+		if "#" not in t:
+			fo.write(t)
 
 ### use CSV Dict Reader to read the Snotel locations into a list of dictionaries
 with open('stat_loc.csv') as csv_loc:
