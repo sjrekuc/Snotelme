@@ -16,6 +16,8 @@ with open(clean_file, 'w') as fo:
 		t = str(line)
 		if "#" not in t:
 			fo.write(t)
+			# write the row to a variable instead
+			print(t)
 
 ### use CSV Dict Reader to read the Snotel locations into a list of dictionaries
 with open('stat_loc.csv') as csv_loc:
