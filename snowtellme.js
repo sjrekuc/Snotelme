@@ -114,6 +114,21 @@ function LoadStat() {
         markerCluster = new MarkerClusterer(map, marker, clusterOptions);
         markerCluster.setMaxZoom(10);
     }; // window.onload
+	//console.log(allStations)
+	
+	// maybe make an array of all of the snow values first - brute force
+	snowfall = []
+	for (i=0; i < allStations.length; i++ ){
+	    snowfall.push(allStations[i].snow);
+	    };
+	console.log(Math.max(snowfall));
+	console.log(Math.min(snowfall));
+	
+// 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
+// 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
+	
+// 	// let's see all of the values
+// 	console.log(allStations.map(function(Obj) { return Obj.snow; }));
 	
 }; // LoadStat()
 
@@ -189,8 +204,6 @@ function initMap() {
 
 // Loads station data
 LoadStat();  // 
-
-
 
 
 var currentMarkers = [];
