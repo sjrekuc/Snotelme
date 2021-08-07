@@ -34,10 +34,11 @@ var Station = function (id,title,lat,long,water=0,precip=0,dep=0,snow=0) {
 		this.id = id;
 		this.title = title;
 		this.position = {lat: parseFloat(lat), lng: parseFloat(long)};
-		this.snow = snow;
+		this.snow = parseFloat(snow)||0;
 		this.clabel = Math.round(this.snow) + '"';
 		this.web = "https://wcc.sc.egov.usda.gov/nwcc/site?sitenum=" + this.id;
 		this.rcolor = 'Blue';
+		// this.depth = parseFloat(dep)||0;
 		this.infoContent = "<h3>" + this.title + " " + this.snow + "inches of new snow </h3>";
 		this.infoContent += "<p><a href=" + this.web + " target='_blank'> Snotel Site </a></p>";
 		this.infoContent += "<p>SWE Total: " + water + " inches of water this season </p>";
@@ -114,21 +115,7 @@ function LoadStat() {
         markerCluster = new MarkerClusterer(map, marker, clusterOptions);
         markerCluster.setMaxZoom(10);
     }; // window.onload
-	//console.log(allStations)
-	
-	// maybe make an array of all of the snow values first - brute force
-	snowfall = []
-	for (i=0; i < allStations.length; i++ ){
-	    snowfall.push(allStations[i].snow);
-	    };
-	console.log(Math.max(snowfall));
-	console.log(Math.min(snowfall));
-	
-// 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
-// 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
-	
-// 	// let's see all of the values
-// 	console.log(allStations.map(function(Obj) { return Obj.snow; }));
+
 	
 }; // LoadStat()
 
@@ -202,8 +189,35 @@ function initMap() {
 // LOOP FOR CREATING MARKERS
 }; //initMap function
 
+// function for determining min and max snowfall and snow depth
+function snowXtremes (stations){
+	
+	// maybe make an array of all of the snow values first - brute force
+	snowfall = [];
+	snowDepth = [];
+	for (i=0; i < stations.length; i++ ){
+	    snowfall.push(stations[i].snow);
+	    //snowDepth.push(stations[i].)
+	    };
+	max_snow = Math.max.apply(Math, snowfall);
+	console.log(max_snow);
+	min_snow = Math.min.apply(Math, snowfall);
+	console.log(min_snow);
+	
+// 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
+// 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
+	
+// 	// let's see all of the values
+// 	console.log(allStations.map(function(Obj) { return Obj.snow; }));
+}
+
+
 // Loads station data
 LoadStat();  // 
+
+// need to delay the write to file to make sure everything loads in HTML
+setTimeout(function(){snowXtremes(allStations)}, 3000);
+
 
 
 var currentMarkers = [];
