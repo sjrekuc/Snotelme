@@ -38,7 +38,7 @@ var Station = function (id,title,lat,long,water=0,precip=0,dep=0,snow=0) {
 		this.clabel = Math.round(this.snow) + '"';
 		this.web = "https://wcc.sc.egov.usda.gov/nwcc/site?sitenum=" + this.id;
 		this.rcolor = 'Blue';
-		// this.depth = parseFloat(dep)||0;
+		this.depth = parseFloat(dep)||0;
 		this.infoContent = "<h3>" + this.title + " " + this.snow + "inches of new snow </h3>";
 		this.infoContent += "<p><a href=" + this.web + " target='_blank'> Snotel Site </a></p>";
 		this.infoContent += "<p>SWE Total: " + water + " inches of water this season </p>";
@@ -197,12 +197,20 @@ function snowXtremes (stations){
 	snowDepth = [];
 	for (i=0; i < stations.length; i++ ){
 	    snowfall.push(stations[i].snow);
-	    //snowDepth.push(stations[i].)
+	    snowDepth.push(stations[i].depth);
 	    };
+	// max and minimum snow fall
 	max_snow = Math.max.apply(Math, snowfall);
 	console.log(max_snow);
 	min_snow = Math.min.apply(Math, snowfall);
 	console.log(min_snow);
+	
+	// max and minimum snow depth
+	max_depth = Math.max.apply(Math, snowDepth);
+	console.log(max_depth);
+	min_depth = Math.min.apply(Math, snowDepth);
+	console.log(min_depth);
+	
 	
 // 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
 // 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
