@@ -148,35 +148,68 @@ var iconStroke = 3;
 // opacity of the icons
 var iconOpacity = 0.65;
 
+/*
+createMark functions just creates a single marker. By abstracting this function out, we can refactor the code for more efficient operation
+*/
+function createMark(sect){
+        marker[markerIndex] = new google.maps.Marker({
+      	position: sect.position,
+      	map: map,
+      	snow: sect.snow,
+      	snowId: sect.id,
+       	label: sect.clabel,
+        	title: sect.title,
+        	icon: {
+          	path: google.maps.SymbolPath.CIRCLE,
+          	scale: iconScale,
+          	strokeColor: sect.rcolor,
+          	strokeWeight: iconStroke,
+          	fillColor: 'white',
+          	fillOpacity: iconOpacity
+            } // icon details
+    	}); // marker function
+    // adds the info windows for each marker
+    // function for creating the listener on the marker for the info window
+    addInfoListener(marker, markerIndex, sect);
+
+    sect.markerNum = markerIndex;
+    
+};
+
+
+/// NEED TO WORK ON THIS FUNCTION: WE NEED TO MAKE SURE THE DETAILS OF THIS FUNCTION
+// HOW DOES THE INFO LISTENER WORK? DOES IT NEED TO POINT BACK TO THE OBJECT?
+
+
+
 /* Marker function takes in a river array that is contains an array of River Section Objects. The function puts those markers on the map and then feeds the river array with the corresponding marker for later use (deletion) 
 */
 function createMarker(river){
 	// loop to create markers
 	for (var sectIndex = 0; sectIndex < river.length; sectIndex++) {
-	marker[markerIndex] = new google.maps.Marker({
-  	position: river[sectIndex].position,
-  	map: map,
-  	snow: river[sectIndex].snow,
-  	snowId: river[sectIndex].id,
-   	label: river[sectIndex].clabel,
-    	title: river[sectIndex].title,
-    	icon: {
-      	path: google.maps.SymbolPath.CIRCLE,
-      	scale: iconScale,
-      	strokeColor: river[sectIndex].rcolor,
-      	strokeWeight: iconStroke,
-      	fillColor: 'white',
-      	fillOpacity: iconOpacity
-    
-    
-}}); // marker function
-// adds the info windows for each marker
-// function for creating the listener on the marker for the info window
-addInfoListener(marker, markerIndex, river[sectIndex]);
+    	marker[markerIndex] = new google.maps.Marker({
+      	position: river[sectIndex].position,
+      	map: map,
+      	snow: river[sectIndex].snow,
+      	snowId: river[sectIndex].id,
+       	label: river[sectIndex].clabel,
+        	title: river[sectIndex].title,
+        	icon: {
+          	path: google.maps.SymbolPath.CIRCLE,
+          	scale: iconScale,
+          	strokeColor: river[sectIndex].rcolor,
+          	strokeWeight: iconStroke,
+          	fillColor: 'white',
+          	fillOpacity: iconOpacity
+            } // icon details
+    	}); // marker function
+    // adds the info windows for each marker
+    // function for creating the listener on the marker for the info window
+    addInfoListener(marker, markerIndex, river[sectIndex]);
 
-river[sectIndex].markerNum = markerIndex;
-markerIndex++; // steps marker index to avoid overwriting
-}; // for loop for markers
+    river[sectIndex].markerNum = markerIndex;
+    markerIndex++; // steps marker index to avoid overwriting
+    }; // for loop for markers
 }; // createMarker function
 
 
