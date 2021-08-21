@@ -12,9 +12,9 @@ var allStations = []
 var infoMaxWidth = window.innerWidth - 100; 
 
 // these info listeners are on each map marker
-function addInfoListener(mark, markIndex, Sect) {
+function addInfoListener(mark, markIndex) {
 	mark[markIndex].infoWindow = new google.maps.InfoWindow({
-    content: Sect.infoContent,
+    content: mark[markIndex].infoContent, // Sect
     maxWidth: infoMaxWidth
     });
 	mark[markIndex].addListener('click', function () {
@@ -23,7 +23,7 @@ function addInfoListener(mark, markIndex, Sect) {
 			mark[i].infoWindow.close();
 		};
 		// resets the info content
-    		mark[markIndex].infoWindow.setContent(Sect.infoContent);
+    		mark[markIndex].infoWindow.setContent(mark[markIndex].infoContent); // Sect
     		// opens the window
     		mark[markIndex].infoWindow.open(map, mark[markIndex]);
 	});
@@ -157,6 +157,7 @@ function createMark(sect){
       	map: map,
       	snow: sect.snow,
       	snowId: sect.id,
+      	infoContent: sect.infoContent,
        	label: sect.clabel,
         	title: sect.title,
         	icon: {
@@ -170,7 +171,7 @@ function createMark(sect){
     	}); // marker function
     // adds the info windows for each marker
     // function for creating the listener on the marker for the info window
-    addInfoListener(marker, markerIndex, sect);
+    addInfoListener(marker, markerIndex);
 
     sect.markerNum = markerIndex;
     
@@ -192,6 +193,7 @@ function createMarker(river){
       	map: map,
       	snow: river[sectIndex].snow,
       	snowId: river[sectIndex].id,
+      	infoContent: river[sectIndex].infoContent,
        	label: river[sectIndex].clabel,
         	title: river[sectIndex].title,
         	icon: {
@@ -205,7 +207,7 @@ function createMarker(river){
     	}); // marker function
     // adds the info windows for each marker
     // function for creating the listener on the marker for the info window
-    addInfoListener(marker, markerIndex, river[sectIndex]);
+    addInfoListener(marker, markerIndex);
 
     river[sectIndex].markerNum = markerIndex;
     markerIndex++; // steps marker index to avoid overwriting
@@ -269,5 +271,11 @@ setTimeout(function(){snowXtremes(allStations)}, 3000);
 
 
 var currentMarkers = [];
+
+
+/*
+Next: place all information and functions contained in the stations object into markers objects
+
+*/
 
 
