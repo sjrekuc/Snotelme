@@ -172,14 +172,8 @@ function createMark(sect){
     // adds the info windows for each marker
     // function for creating the listener on the marker for the info window
     addInfoListener(marker, markerIndex);
-
-    sect.markerNum = markerIndex;
     
 };
-
-
-/// NEED TO WORK ON THIS FUNCTION: WE NEED TO MAKE SURE THE DETAILS OF THIS FUNCTION
-// HOW DOES THE INFO LISTENER WORK? DOES IT NEED TO POINT BACK TO THE OBJECT?
 
 
 
@@ -188,28 +182,30 @@ function createMark(sect){
 function createMarker(river){
 	// loop to create markers
 	for (var sectIndex = 0; sectIndex < river.length; sectIndex++) {
-    	marker[markerIndex] = new google.maps.Marker({
-      	position: river[sectIndex].position,
-      	map: map,
-      	snow: river[sectIndex].snow,
-      	snowId: river[sectIndex].id,
-      	infoContent: river[sectIndex].infoContent,
-       	label: river[sectIndex].clabel,
-        	title: river[sectIndex].title,
-        	icon: {
-          	path: google.maps.SymbolPath.CIRCLE,
-          	scale: iconScale,
-          	strokeColor: river[sectIndex].rcolor,
-          	strokeWeight: iconStroke,
-          	fillColor: 'white',
-          	fillOpacity: iconOpacity
-            } // icon details
-    	}); // marker function
-    // adds the info windows for each marker
-    // function for creating the listener on the marker for the info window
-    addInfoListener(marker, markerIndex);
+	    
+	    createMark(river[sectIndex]);
+	    
+    // 	marker[markerIndex] = new google.maps.Marker({
+    //   	position: river[sectIndex].position,
+    //   	map: map,
+    //   	snow: river[sectIndex].snow,
+    //   	snowId: river[sectIndex].id,
+    //   	infoContent: river[sectIndex].infoContent,
+    //   	label: river[sectIndex].clabel,
+    //     	title: river[sectIndex].title,
+    //     	icon: {
+    //       	path: google.maps.SymbolPath.CIRCLE,
+    //       	scale: iconScale,
+    //       	strokeColor: river[sectIndex].rcolor,
+    //       	strokeWeight: iconStroke,
+    //       	fillColor: 'white',
+    //       	fillOpacity: iconOpacity
+    //         } // icon details
+    // 	}); // marker function
+    // // adds the info windows for each marker
+    // // function for creating the listener on the marker for the info window
+    // addInfoListener(marker, markerIndex);
 
-    river[sectIndex].markerNum = markerIndex;
     markerIndex++; // steps marker index to avoid overwriting
     }; // for loop for markers
 }; // createMarker function
@@ -275,6 +271,11 @@ var currentMarkers = [];
 
 /*
 Next: place all information and functions contained in the stations object into markers objects
+
+- figure out why there is an issue eliminating the marker number from station objects
+
+
+ - > need to rewrite functions to check difficulty and flow to use the markers directly and NOT the marker numbers
 
 */
 
