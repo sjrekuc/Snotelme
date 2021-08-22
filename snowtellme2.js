@@ -175,8 +175,6 @@ function createMark(sect){
     
 };
 
-
-
 /* Marker function takes in a river array that is contains an array of River Section Objects. The function puts those markers on the map and then feeds the river array with the corresponding marker for later use (deletion) 
 */
 function createMarker(river){
@@ -185,27 +183,6 @@ function createMarker(river){
 	    
 	    createMark(river[sectIndex]);
 	    
-    // 	marker[markerIndex] = new google.maps.Marker({
-    //   	position: river[sectIndex].position,
-    //   	map: map,
-    //   	snow: river[sectIndex].snow,
-    //   	snowId: river[sectIndex].id,
-    //   	infoContent: river[sectIndex].infoContent,
-    //   	label: river[sectIndex].clabel,
-    //     	title: river[sectIndex].title,
-    //     	icon: {
-    //       	path: google.maps.SymbolPath.CIRCLE,
-    //       	scale: iconScale,
-    //       	strokeColor: river[sectIndex].rcolor,
-    //       	strokeWeight: iconStroke,
-    //       	fillColor: 'white',
-    //       	fillOpacity: iconOpacity
-    //         } // icon details
-    // 	}); // marker function
-    // // adds the info windows for each marker
-    // // function for creating the listener on the marker for the info window
-    // addInfoListener(marker, markerIndex);
-
     markerIndex++; // steps marker index to avoid overwriting
     }; // for loop for markers
 }; // createMarker function
