@@ -8,6 +8,13 @@ var markerCluster;
 
 var allStations = []
 
+// initializes the markers
+var marker = [];
+// initializes the infoWindow
+var infoWindow = [];
+// and the marker index
+var markerIndex = 0;
+
 // I'm not sure why I set this width to 100 less than the window width
 var infoMaxWidth = window.innerWidth - 100; 
 
@@ -93,6 +100,12 @@ var Station = function (id,title,lat,long,water=0,precip=0,dep=0,snow=0) {
 		}; // markerFlow function		
 };
 
+
+
+
+
+
+
 // loads the Snotel Stations and adds all of the data to the allStations array
 function LoadStat() {
 	var strRawContents;
@@ -106,6 +119,7 @@ function LoadStat() {
         			var tempStat = new Station(tempArr[0], tempArr[1], tempArr[2], tempArr[3], tempArr[4], tempArr[5], tempArr[6], tempArr[7])
         			tempStat.setColor()
         			allStations.push(tempStat)
+        			// createMark(tempStat);
         		};
 		} // success	
 	}); // ajax
@@ -122,9 +136,6 @@ function LoadStat() {
 	
 }; // LoadStat()
 
-// initializes the clustering
-var markerCluster = new Object();
-
 // options object for the cluster
 var clusterOptions = {
   'gridSize': 35,
@@ -133,13 +144,6 @@ var clusterOptions = {
   'minimumClusterSize': 3,
   'imagePath': 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
 };
-
-// initializes the markers
-var marker = [];
-// initializes the infoWindow
-var infoWindow = [];
-// and the marker index
-var markerIndex = 0;
 
 // scale of icons on map
 var iconScale = 18;
