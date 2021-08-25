@@ -100,10 +100,33 @@ var Station = function (id,title,lat,long,water=0,precip=0,dep=0,snow=0) {
 		}; // markerFlow function		
 };
 
-
-
-
-
+/*
+createMark functions just creates a single marker. By abstracting this function out, we can refactor the code for more efficient operation
+*/
+function createMark(sect){
+        marker[markerIndex] = new google.maps.Marker({
+      	position: sect.position,
+      	map: map,
+      	snow: sect.snow,
+      	snowId: sect.id,
+      	infoContent: sect.infoContent,
+       	label: sect.clabel,
+        	title: sect.title,
+        	icon: {
+          	path: google.maps.SymbolPath.CIRCLE,
+          	scale: iconScale,
+          	strokeColor: sect.rcolor,
+          	strokeWeight: iconStroke,
+          	fillColor: 'white',
+          	fillOpacity: iconOpacity
+            } // icon details
+    	}); // marker function
+    // adds the info windows for each marker
+    // function for creating the listener on the marker for the info window
+    addInfoListener(marker, markerIndex);
+    markerIndex++; // steps marker index to avoid overwriting
+    
+};
 
 
 // loads the Snotel Stations and adds all of the data to the allStations array
@@ -152,33 +175,6 @@ var iconStroke = 3;
 // opacity of the icons
 var iconOpacity = 0.65;
 
-/*
-createMark functions just creates a single marker. By abstracting this function out, we can refactor the code for more efficient operation
-*/
-function createMark(sect){
-        marker[markerIndex] = new google.maps.Marker({
-      	position: sect.position,
-      	map: map,
-      	snow: sect.snow,
-      	snowId: sect.id,
-      	infoContent: sect.infoContent,
-       	label: sect.clabel,
-        	title: sect.title,
-        	icon: {
-          	path: google.maps.SymbolPath.CIRCLE,
-          	scale: iconScale,
-          	strokeColor: sect.rcolor,
-          	strokeWeight: iconStroke,
-          	fillColor: 'white',
-          	fillOpacity: iconOpacity
-            } // icon details
-    	}); // marker function
-    // adds the info windows for each marker
-    // function for creating the listener on the marker for the info window
-    addInfoListener(marker, markerIndex);
-    
-};
-
 /* Marker function takes in a river array that is contains an array of River Section Objects. The function puts those markers on the map and then feeds the river array with the corresponding marker for later use (deletion) 
 */
 function createMarker(river){
@@ -187,7 +183,6 @@ function createMarker(river){
 	    
 	    createMark(river[sectIndex]);
 	    
-    markerIndex++; // steps marker index to avoid overwriting
     }; // for loop for markers
 }; // createMarker function
 
