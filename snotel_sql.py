@@ -32,8 +32,7 @@ fi.close()
 # connect to the database
 mydb = mysql.connector.connect(
   host="localhost",
-  user="srekuc",
-  password="Yay!Utah21",
+
   database="Snotel"
 )
 
