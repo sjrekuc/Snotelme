@@ -24,8 +24,9 @@ for line in response.text.splitlines():
     if '#' not in line:
         l = line.split(',')
         if i > 0:
-            v = (l[2], l[3], l[4], l[5], l[1])
-            # mycursor.execute("UPDATE Snow (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s", v)
+            v = (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1]))
+            mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s, WHERE Station_Id = %s ;", v)
+            # mycursor.execute("UPDATE Snow SET (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s ;", v)
             print(v)
         i+=1
 # print(response.text)
