@@ -8,26 +8,6 @@ from collections import OrderedDict
 url='https://wcc.sc.egov.usda.gov/reportGenerator/view_csv/customMultipleStationReport/daily/network=%22SNTLT%22,%22SNTL%22%20AND%20element=%22SNWD%22%20AND%20outServiceDate=%222100-01-01%22%7Cname/0,0/name,stationId,WTEQ::value,WTEQ::delta,SNWD::value,SNWD::delta'
 raw_file = 'raw.csv'
 response = requests.get(url)
-# read the CSV file first save before working with it more
-with open('raw.csv', 'wb') as f:
-    for chunk in response:
-        f.write(chunk)
-
-# read the raw CSV back in and remove the commented lines
-# open raw CSV
-fi = open(raw_file, 'r')
-
-# read raw CSV to clean CSV - eliminate comment rows with "#"
-clean_file = 'clean.csv'
-with open(clean_file, 'w') as fo:
-    lines = fi.readlines()
-    for line in lines:
-        if "#" not in line:
-            fo.write(line)
-fi.close()
-
-
-# ### need to figure out SQL from here on out.
 
 # connect to the database
 mydb = mysql.connector.connect(
@@ -38,8 +18,59 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
+
+i=0
+for line in response.text.splitlines():
+    if '#' not in line:
+        l = line.split(',')
+        if i > 0:
+            v = (l[2], l[3], l[4], l[5], l[1])
+            # mycursor.execute("UPDATE Snow (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s", v)
+            print(v)
+        i+=1
+# print(response.text)
+
+# lines = response.text.split()
+# for line in lines:
+#     print(line)
+
+
+
+# # read the CSV file first save before working with it more
+# with open('raw.csv', 'wb') as f:
+#     for chunk in response.text:
+#         f.write(chunk)
+#         print(chunk)
+
+# read the raw CSV back in and remove the commented lines
+# open raw CSV
+fi = open(raw_file, 'r')
+
+# # read raw CSV to clean CSV - eliminate comment rows with "#"
+# clean_file = 'clean.csv'
+# with open(clean_file, 'w') as fo:
+#     lines = fi.readlines()
+#     for line in lines:
+#         if "#" not in line:
+#             fo.write(line)
+# fi.close()
+
+
+# ### need to figure out SQL from here on out.
+
+# connect to the database
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="srekuc",
+  password="Yay!Utah21",
+  database="Snotel"
+)
+
+mycursor = mydb.cursor()
+
 # query
-# mycursor.execute("UPDATE Snow (Station_Id, Station_Name, latitude, longitude) VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
+# mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
+# mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
 
 
 for x in mycursor:
