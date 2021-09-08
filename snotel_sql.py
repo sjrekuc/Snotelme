@@ -12,7 +12,8 @@ response = requests.get(url)
 # connect to the database
 mydb = mysql.connector.connect(
   host="localhost",
-
+  user="srekuc",
+  password="Yay!Utah21",
   database="Snotel"
 )
 
@@ -25,9 +26,12 @@ for line in response.text.splitlines():
         l = line.split(',')
         if i > 0:
             v = (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1]))
-            mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s, WHERE Station_Id = %s ;", v)
-            # mycursor.execute("UPDATE Snow SET (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s ;", v)
             print(v)
+            # mycursor.execute("SELECT * FROM Snow WHERE Station_Id = %s ", (int(l[1]),))
+            mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s, WHERE Station_Id = %s ", (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1])))
+            # mycursor.execute("UPDATE Snow SET (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s ;", v)
+            for x in mycursor:
+	            print(x)
         i+=1
 # print(response.text)
 
