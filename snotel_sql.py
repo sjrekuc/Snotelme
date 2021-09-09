@@ -12,12 +12,11 @@ response = requests.get(url)
 # connect to the database
 mydb = mysql.connector.connect(
   host="localhost",
-  user="srekuc",
-  password="Yay!Utah21",
   database="Snotel"
 )
 
 mycursor = mydb.cursor()
+mycursor.execute("UPDATE Snow SET water = $s WHERE Station_Id = %s ", (l[2], int(l[1])))
 
 
 i=0
@@ -27,11 +26,14 @@ for line in response.text.splitlines():
         if i > 0:
             v = (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1]))
             print(v)
-            # mycursor.execute("SELECT * FROM Snow WHERE Station_Id = %s ", (int(l[1]),))
-            mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s, WHERE Station_Id = %s ", (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1])))
+            # mycursor.execute("SELECT * FROM Snow WHERE Station_Id = %s ", (int(l[1]),)) # this works
+            mycursor.execute("UPDATE Snow SET water = $s WHERE Station_Id = %s ", (l[2], int(l[1])))
+            db.commit()
+            # mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s WHERE Station_Id = %s ", (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1])))
             # mycursor.execute("UPDATE Snow SET (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s ;", v)
-            for x in mycursor:
-	            print(x)
+            # for x in mycursor:
+	           # print(x)
+	       
         i+=1
 # print(response.text)
 
@@ -49,7 +51,7 @@ for line in response.text.splitlines():
 
 # read the raw CSV back in and remove the commented lines
 # open raw CSV
-fi = open(raw_file, 'r')
+# fi = open(raw_file, 'r')
 
 # # read raw CSV to clean CSV - eliminate comment rows with "#"
 # clean_file = 'clean.csv'
@@ -64,14 +66,14 @@ fi = open(raw_file, 'r')
 # ### need to figure out SQL from here on out.
 
 # connect to the database
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="srekuc",
-  password="Yay!Utah21",
-  database="Snotel"
-)
+# mydb = mysql.connector.connect(
+#   host="localhost",
+#   user="srekuc",
+#   password="Yay!Utah21",
+#   database="Snotel"
+# )
 
-mycursor = mydb.cursor()
+# mycursor = mydb.cursor()
 
 # query
 # mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
