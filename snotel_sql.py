@@ -33,14 +33,10 @@ for line in response.text.splitlines():
         l = line.split(',')
         if i > 0:
             v = (clean_up(l[2]), clean_up(l[3]), clean_up(l[4]), clean_up(l[5]), int(l[1]))
-            print(v)
             # mycursor.execute("SELECT * FROM Snow WHERE Station_Id = %s ", (int(l[1]),)) # this works - prints all stations
-            mycursor.execute("UPDATE Snow SET water = %s WHERE Station_Id = %s ", (v[0], v[4]))
+            # mycursor.execute("UPDATE Snow SET water = %s WHERE Station_Id = %s ", (v[0], v[4])) # this works - updates the water at each station
+            mycursor.execute("UPDATE Snow SET water = %s, precip = %s, depth = %s, snow = %s WHERE Station_Id = %s ", v)
             mydb.commit()
-            # mycursor.execute("UPDATE Snow SET water = $s, precip = %s, depth = %s, snow = %s WHERE Station_Id = %s ", (l[2], l[3], l[4] or 0, l[5] or 0, int(l[1])))
-            # mycursor.execute("UPDATE Snow SET (water, precip, depth, snow) VALUES (%s, %s, %s, %s) WHERE Station_Id = %s ;", v)
-            # for x in mycursor:
-	           # print(x)
 	       
         i+=1
 # print(response.text)
