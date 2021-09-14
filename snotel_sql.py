@@ -13,7 +13,6 @@ response = requests.get(url)
 mydb = mysql.connector.connect(
   host="localhost",
 
-  database="Snotel"
 )
 
 mycursor = mydb.cursor()
@@ -26,7 +25,7 @@ def clean_up(num):
     except:
         return 0
 
-
+# loops through the response and updates those values in the SQL DB
 i=0
 for line in response.text.splitlines():
     if '#' not in line:
@@ -37,7 +36,7 @@ for line in response.text.splitlines():
             # mycursor.execute("UPDATE Snow SET water = %s WHERE Station_Id = %s ", (v[0], v[4])) # this works - updates the water at each station
             mycursor.execute("UPDATE Snow SET water = %s, precip = %s, depth = %s, snow = %s WHERE Station_Id = %s ", v)
             mydb.commit()
-	       
+        print(i)
         i+=1
 # print(response.text)
 
@@ -47,34 +46,13 @@ for line in response.text.splitlines():
 
 
 
-# # read the CSV file first save before working with it more
-# with open('raw.csv', 'wb') as f:
-#     for chunk in response.text:
-#         f.write(chunk)
-#         print(chunk)
-
-# read the raw CSV back in and remove the commented lines
-# open raw CSV
-# fi = open(raw_file, 'r')
-
-# # read raw CSV to clean CSV - eliminate comment rows with "#"
-# clean_file = 'clean.csv'
-# with open(clean_file, 'w') as fo:
-#     lines = fi.readlines()
-#     for line in lines:
-#         if "#" not in line:
-#             fo.write(line)
-# fi.close()
-
-
 # ### need to figure out SQL from here on out.
 
 # connect to the database
 # mydb = mysql.connector.connect(
 #   host="localhost",
-#   user="srekuc",
-#   password="Yay!Utah21",
-#   database="Snotel"
+
+
 # )
 
 # mycursor = mydb.cursor()
@@ -83,10 +61,13 @@ for line in response.text.splitlines():
 # mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
 # mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
 
-
+mycursor.execute("SELECT * FROM Snow WHERE snow IS NOT NULL")
 for x in mycursor:
 	print(x)
-	
+
+mycursor.execute("SELECT COUNT(snow) FROM Snow")
+for x in mycursor:
+	print(x)
 
 ### loads the snowfall clean file and adds it to the DB
 ### use CSV Dict Reader to read in the snowfall into the list of dictionaries
