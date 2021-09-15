@@ -38,28 +38,7 @@ for line in response.text.splitlines():
             mydb.commit()
         print(i)
         i+=1
-# print(response.text)
 
-# lines = response.text.split()
-# for line in lines:
-#     print(line)
-
-
-
-# ### need to figure out SQL from here on out.
-
-# connect to the database
-# mydb = mysql.connector.connect(
-#   host="localhost",
-
-
-# )
-
-# mycursor = mydb.cursor()
-
-# query
-# mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
-# mycursor.execute("UPDATE Snow () VALUES (%s, %s, %s, %s) WHERE Station_Id = ", t)
 
 mycursor.execute("SELECT * FROM Snow WHERE snow IS NOT NULL")
 for x in mycursor:
@@ -68,8 +47,20 @@ for x in mycursor:
 mycursor.execute("SELECT COUNT(snow) FROM Snow")
 for x in mycursor:
 	print(x)
+	
+# write the snotel data from the DB to a CSV so we can use with the current JS code
 
-### loads the snowfall clean file and adds it to the DB
+## write that list of stations to a CSV that can be used on the website
+with open('public_html/snow2.csv', mode='w') as csv_combo:
+	# uses fieldnames to maintain the order
+	writer = csv.writer(csv_combo)
+	mycursor.execute("SELECT * FROM Snow WHERE snow IS NOT NULL")
+	for j in mycursor:
+		writer.writerow(j)
+
+
+
+
 ### use CSV Dict Reader to read in the snowfall into the list of dictionaries
 # with open(clean_file) as csv_snow:
 # 	csv_reader = csv.DictReader(csv_snow, delimiter=',')
@@ -90,10 +81,6 @@ for x in mycursor:
 # 				locations[i]['Change In Snow Depth (in)'] = row['Change In Snow Depth (in)']
 # 		line_count += 1
 	
-	
-	
-
-# # load the station information from CSV so that it can be added to the MySQL DB
 # ### use CSV Dict Reader to read the Snotel locations into a list of dictionaries
 # with open('stat_loc.csv') as csv_loc:
 # 	csv_reader = csv.DictReader(csv_loc, delimiter=',')
@@ -108,42 +95,3 @@ for x in mycursor:
 # 		line_count += 1
 
 # print(len(locations))
-
-# ##### Updating the tables with the new snow data
-# mycursor = mydb.cursor()
-
-
-
-# Inserting the location data into the tables
-# mycursor = mydb.cursor()
-# count = 0;
-# for d in locations:
-#     t = (d['Station Id'], d['Station Name'], d['Latitude'], d['Longitude'])
-#     print(t)
-#     # count +=1
-#     # if count > 5:
-#     #     break
-#     mycursor.execute("INSERT INTO Snow (Station_Id, Station_Name, latitude, longitude) VALUES (%s, %s, %s, %s)", t)
-
-
-#### Delete query
-# mycursor = mydb.cursor()
-# mycursor.execute("DELETE FROM Snow WHERE Station_Id = '301' & Snow = 'Null'; ") #  
-
-
-# mycursor.executemany("INSERT INTO Snow (Station_Id, Station_Name, latitude, longitude, water, precip, depth, snow) VALUES (%s, %s)", locations)
-
-
-# # read that CSV to a DF
-# snow = pd.read_csv(clean_file, error_bad_lines=False)
-
-# # read the location data from that CSV
-# loc_file = 'stat_loc.csv'
-# loc = pd.read_csv(loc_file, error_bad_lines=False)
-
-# # merge the location and snowfall data
-# df = pd.merge(loc, snow, on="Station Id", how='left')
-# df.drop('Station Name_y', axis=1, inplace=True)
-
-# # export that data to the CSV to use for website
-# df.to_csv("snow.csv", index=False)
