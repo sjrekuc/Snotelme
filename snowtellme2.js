@@ -133,7 +133,7 @@ function createMark(sect){
 function LoadStat() {
 	var strRawContents;
 	$.ajax({
-		url: "snow.csv",
+		url: "snow2.csv",
 		success: function(data){
 			strRawContents = data;
 			var arrLines = strRawContents.split("\n");
