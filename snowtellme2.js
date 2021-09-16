@@ -225,6 +225,9 @@ function snowXtremes (stations){
 	min_depth = Math.min.apply(Math, snowDepth);
 	console.log(min_depth);
 	
+	// log the total number of stations
+	console.log(stations.length);
+	
 	
 // 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
 // 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
