@@ -1,17 +1,27 @@
 // JS script Snotel Stations
+/*
+Big thought: instead of building the stations as separate objects from the markers, we should make the markers contain all of the information for a station
+*/
 
 var curDate = new Date();
 var markerCluster;
 
 var allStations = []
 
+// initializes the markers
+var marker = [];
+// initializes the infoWindow
+var infoWindow = [];
+// and the marker index
+var markerIndex = 0;
+
 // I'm not sure why I set this width to 100 less than the window width
 var infoMaxWidth = window.innerWidth - 100; 
 
 // these info listeners are on each map marker
-function addInfoListener(mark, markIndex, Sect) {
+function addInfoListener(mark, markIndex) {
 	mark[markIndex].infoWindow = new google.maps.InfoWindow({
-    content: Sect.infoContent,
+    content: mark[markIndex].infoContent, // Sect
     maxWidth: infoMaxWidth
     });
 	mark[markIndex].addListener('click', function () {
@@ -20,7 +30,7 @@ function addInfoListener(mark, markIndex, Sect) {
 			mark[i].infoWindow.close();
 		};
 		// resets the info content
-    		mark[markIndex].infoWindow.setContent(Sect.infoContent);
+    		mark[markIndex].infoWindow.setContent(mark[markIndex].infoContent); // Sect
     		// opens the window
     		mark[markIndex].infoWindow.open(map, mark[markIndex]);
 	});
@@ -90,11 +100,40 @@ var Station = function (id,title,lat,long,water=0,precip=0,dep=0,snow=0) {
 		}; // markerFlow function		
 };
 
+/*
+createMark functions just creates a single marker. By abstracting this function out, we can refactor the code for more efficient operation
+*/
+function createMark(sect){
+        marker[markerIndex] = new google.maps.Marker({
+      	position: sect.position,
+      	map: map,
+      	snow: sect.snow,
+      	snowId: sect.id,
+      	infoContent: sect.infoContent,
+       	label: sect.clabel,
+        	title: sect.title,
+        	icon: {
+          	path: google.maps.SymbolPath.CIRCLE,
+          	scale: iconScale,
+          	strokeColor: sect.rcolor,
+          	strokeWeight: iconStroke,
+          	fillColor: 'white',
+          	fillOpacity: iconOpacity
+            } // icon details
+    	}); // marker function
+    // adds the info windows for each marker
+    // function for creating the listener on the marker for the info window
+    addInfoListener(marker, markerIndex);
+    markerIndex++; // steps marker index to avoid overwriting
+    
+};
+
+
 // loads the Snotel Stations and adds all of the data to the allStations array
 function LoadStat() {
 	var strRawContents;
 	$.ajax({
-		url: "snow.csv",
+		url: "snow2.csv",
 		success: function(data){
 			strRawContents = data;
 			var arrLines = strRawContents.split("\n");
@@ -103,6 +142,7 @@ function LoadStat() {
         			var tempStat = new Station(tempArr[0], tempArr[1], tempArr[2], tempArr[3], tempArr[4], tempArr[5], tempArr[6], tempArr[7])
         			tempStat.setColor()
         			allStations.push(tempStat)
+        			// createMark(tempStat);
         		};
 		} // success	
 	}); // ajax
@@ -119,9 +159,6 @@ function LoadStat() {
 	
 }; // LoadStat()
 
-// initializes the clustering
-var markerCluster = new Object();
-
 // options object for the cluster
 var clusterOptions = {
   'gridSize': 35,
@@ -130,13 +167,6 @@ var clusterOptions = {
   'minimumClusterSize': 3,
   'imagePath': 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
 };
-
-// initializes the markers
-var marker = [];
-// initializes the infoWindow
-var infoWindow = [];
-// and the marker index
-var markerIndex = 0;
 
 // scale of icons on map
 var iconScale = 18;
@@ -150,27 +180,11 @@ var iconOpacity = 0.65;
 function createMarker(river){
 	// loop to create markers
 	for (var sectIndex = 0; sectIndex < river.length; sectIndex++) {
-	marker[markerIndex] = new google.maps.Marker({
-  	position: river[sectIndex].position,
-  	map: map,
-   	label: river[sectIndex].clabel,
-    	title: river[sectIndex].title,
-    	icon: {
-      	path: google.maps.SymbolPath.CIRCLE,
-      	scale: iconScale,
-      	strokeColor: river[sectIndex].rcolor,
-      	strokeWeight: iconStroke,
-      	fillColor: 'white',
-      	fillOpacity: iconOpacity
-}}); // marker function
-// adds the info windows for each marker
-// function for creating the listener on the marker for the info window
-addInfoListener(marker, markerIndex, river[sectIndex]);
-
-river[sectIndex].markerNum = markerIndex;
-markerIndex++; // steps marker index to avoid overwriting
-}; // for loop for markers
-} // createMarker function
+	    
+	    createMark(river[sectIndex]);
+	    
+    }; // for loop for markers
+}; // createMarker function
 
 
 // create the map variable before the map initializing
@@ -211,6 +225,9 @@ function snowXtremes (stations){
 	min_depth = Math.min.apply(Math, snowDepth);
 	console.log(min_depth);
 	
+	// log the total number of stations
+	console.log(stations.length);
+	
 	
 // 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
 // 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
@@ -229,5 +246,16 @@ setTimeout(function(){snowXtremes(allStations)}, 3000);
 
 
 var currentMarkers = [];
+
+
+/*
+Next: place all information and functions contained in the stations object into markers objects
+
+- figure out why there is an issue eliminating the marker number from station objects
+
+
+ - > need to rewrite functions to check difficulty and flow to use the markers directly and NOT the marker numbers
+
+*/
 
 
