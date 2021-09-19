@@ -108,6 +108,7 @@ function createMark(sect){
       	position: sect.position,
       	map: map,
       	snow: sect.snow,
+      	depth: sect.depth,
       	snowId: sect.id,
       	infoContent: sect.infoContent,
        	label: sect.clabel,
@@ -141,7 +142,7 @@ function LoadStat() {
         			var tempArr = arrLines[i].split(",");
         			var tempStat = new Station(tempArr[0], tempArr[1], tempArr[2], tempArr[3], tempArr[4], tempArr[5], tempArr[6], tempArr[7])
         			tempStat.setColor()
-        			allStations.push(tempStat)
+        			//allStations.push(tempStat)
         			createMark(tempStat);
         		};
 		} // success	
@@ -150,7 +151,7 @@ function LoadStat() {
 	// onload command to make sure this loads after the google maps API is ready
     window.onload = function () {
         // createMarker Loop for all the stations
-	    createMarker(allStations);
+	    // createMarker(allStations);
 	    // for loop to create all of the river markers
         markerCluster = new MarkerClusterer(map, marker, clusterOptions);
         markerCluster.setMaxZoom(10);
@@ -209,9 +210,9 @@ function snowXtremes (stations){
 	// maybe make an array of all of the snow values first - brute force
 	snowfall = [];
 	snowDepth = [];
-	for (i=0; i < stations.length; i++ ){
-	    snowfall.push(stations[i].snow);
-	    snowDepth.push(stations[i].depth);
+	for (i=0; i < marker.length; i++ ){
+	    snowfall.push(marker[i].snow);
+	    snowDepth.push(marker[i].depth);
 	    };
 	// max and minimum snow fall
 	max_snow = Math.max.apply(Math, snowfall);
@@ -226,8 +227,7 @@ function snowXtremes (stations){
 	console.log(min_depth);
 	
 	// log the total number of stations
-	console.log(stations.length);
-	
+	console.log(marker.length);
 	
 // 	console.log(Math.max.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
 // 	console.log(Math.min.apply(Math, allStations.map(function(Obj) { return Obj.snow; })));
